@@ -4,16 +4,15 @@
 var createClass = function() {
     var private = {
         "classes": {}, //All defined classes will be saved here
-        "cloneObject": function(originalObject) { //Simple deep-object-cloning-function
-            var clonnedObject = {};
-            for (key in originalObject) {
-                if (typeof originalObject[key] !== "object") {
-                    clonnedObject[key] = originalObject[key];
-                } else {
-                    clonnedObject[key] = private.cloneObject(originalObject[key]);
+        "getClone": function(item) { //If item is an object it gets clonned, if not it just return the passed item
+            if (typeof item === "object") {
+                var itemClone = {};
+                for (key in item) {
+                    itemClone[key] = private.getClone(item[key]);
                 }
+                item = itemClone;
             }
-            return clonnedObject;
+            return item;
         },
         "createObject": function(classId, contructArguments) { //Creates a object from the class (defined by clasId)
             var classOptions = private.classes[classId];
@@ -28,8 +27,10 @@ var createClass = function() {
                 "public": {}
             };
             for (visibility in object) {
-                object[visibility] = private.cloneObject(classOptions[visibility] || {});
-                for (key in object[visibility]) {
+                for (key in classOptions[visibility] || {}) {
+                    object[visibility][key] = private.getClone(classOptions[visibility][key]);
+
+                    //Bind to "object" if function
                     if (object[visibility][key].bind) {
                         object[visibility][key] = object[visibility][key].bind(object);
                     }

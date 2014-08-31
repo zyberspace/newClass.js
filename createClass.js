@@ -22,22 +22,24 @@ var createClass = function() {
             }
 
             //Build object
-            var object = private.cloneObject(classOptions.public || {});
-            var privateObject = {
-                "private": private.cloneObject(classOptions.private || {}),
-                "protected": private.cloneObject(classOptions.protected || {})
+            var object = {
+                "private": {},
+                "protected": {},
+                "public": {}
             };
-            for (key in object) {
-                if (object[key].bind) {
-                    object[key] = object[key].bind(privateObject);
+            for (visibility in object) {
+                object[visibility] = private.cloneObject(classOptions[visibility] || {});
+                for (key in object[visibility]) {
+                    if (object[visibility][key].bind) {
+                        object[visibility][key] = object[visibility][key].bind(object);
+                    }
                 }
-                privateObject[key] = object[key];
             }
 
             //Call constructor
-            (object["__construct"] || object["__"] || function() {}).apply(privateObject, contructArguments);
+            (object.public["__construct"] || object.public["__"] || function() {}).apply(object, contructArguments);
 
-            return object;
+            return object.public;
         }
     };
 

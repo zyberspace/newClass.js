@@ -12,7 +12,10 @@ if (typeof require !== "undefined") { //This example can also be used in a web b
         },
         "protected": {
             "protectedString": "blabla",
-            "bla": "faa"
+            "bla": "faa",
+            "showProtectedVariables": function() {
+                console.log("Protected:", this.protected);
+            }
         },
         "public": {
             "publicBoolean": true,
@@ -22,15 +25,18 @@ if (typeof require !== "undefined") { //This example can also be used in a web b
                 }
             },
             "publicFunction": function() {
-                console.log("Protected:", this.protected);
+                this.protected.showProtectedVariables();
             },
             "showClosureVariable": function() {
                 console.log("Closure:", closureVariable);
+            },
+            "setPublicBoolean": function(value) {
+                this.public.publicBoolean = Boolean(value);
             }
         }
     });
 
-    console.log("//Testing visibility and constructors");
+    console.log("//Testing visibility, constructors and binds");
     var test = new myClass(true);
     test.publicFunction();
     test.showClosureVariable();
@@ -38,7 +44,7 @@ if (typeof require !== "undefined") { //This example can also be used in a web b
 
     console.log("\n//Testing if variables are non-coupled");
     var test2 = new myClass(false);
-    test.publicBoolean = 12;
-    test2.publicBoolean = 13;
+    test.setPublicBoolean(false);
+    test2.setPublicBoolean(true);
     console.log(test.publicBoolean, test2.publicBoolean);
 })();

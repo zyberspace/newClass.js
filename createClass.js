@@ -14,7 +14,7 @@ var createClass = function() {
             }
             return item;
         },
-        "createObject": function(classId, contructArguments) { //Creates a object from the class (defined by clasId)
+        "createObject": function(classId, contructArguments) { //Creates a object from the class (defined by classId)
             var classOptions = private.classes[classId];
             if (!classOptions) {
                 throw "Error: There is no class registered with the id \"" + classId + "\"!";

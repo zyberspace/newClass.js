@@ -1,0 +1,24 @@
+{
+  "name": "zyberWare-createClass",
+  "description": "Allows you to create php-like classes and objects",
+  "keywords": [
+    "class",
+    "oop",
+    "object",
+    "php",
+    "private",
+    "protected",
+    "public"
+  ],
+  "author": {
+    "name": "Eric Enold",
+    "email": "zyberspace@zyberware.org"
+  },
+  "license": {
+    "type" : "MPL",
+    "url" : "http://mozilla.org/MPL/2.0/"
+  },
+  "version": "0.0.0",
+
+  "main": "createClass.js"
+}

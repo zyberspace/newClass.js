@@ -22,10 +22,10 @@ var createClass = function() {
             }
 
             //Build object
-            var object = private.cloneObject(classOptions.public);
+            var object = private.cloneObject(classOptions.public || {});
             var privateObject = {
-                "private": private.cloneObject(classOptions.private),
-                "protected": private.cloneObject(classOptions.protected)
+                "private": private.cloneObject(classOptions.private || {}),
+                "protected": private.cloneObject(classOptions.protected || {})
             };
             for (key in object) {
                 if (object[key].bind) {

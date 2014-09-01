@@ -14,18 +14,33 @@ var createClass = function() {
             }
             return item;
         },
-        "createObject": function(classId, contructArguments) { //Creates a object from the class (defined by classId)
+         //Only builds the object and returns it
+        "buildObject": function(classId, objectProtected, objectPublic) {
             var classOptions = private.classes[classId];
             if (!classOptions) {
                 throw "Error: There is no class registered with the id \"" + classId + "\"!";
             }
 
-            //Build object
-            var object = {
-                "private": {},
-                "protected": {},
-                "public": {}
-            };
+            //The protected- and public-object are shared in the whole family
+            if (typeof objectProtected !== "undefined" && typeof objectPublic !== "undefined") {
+                var object = {
+                    "private": {}, //We use our own private-object
+                    "protected": objectProtected,
+                    "public": objectPublic
+                };
+            } else {
+                var object = {
+                    "private": {},
+                    "protected": {},
+                    "public": {}
+                };
+            }
+
+            //Do we have a parent class?
+            if (classOptions.extends && (parentClassId = classOptions.extends.prototype.__id)) {
+                parentObject = private.buildObject(parentClassId, object.protected, object.public);
+            }
+
             for (visibility in object) {
                 for (key in classOptions[visibility] || {}) {
                     object[visibility][key] = private.getClone(classOptions[visibility][key]);
@@ -37,9 +52,17 @@ var createClass = function() {
                 }
             }
 
+            return object;
+        },
+         //Build the object, calls the constructor and returns the public properties and methods
+        "getObjectForCaller": function(classId, contructArguments) {
+            //Build object
+            var object = private.buildObject(classId);
+
             //Call constructor
             (object.public["__construct"] || object.public["__"] || function() {}).apply(object, contructArguments);
 
+            //Return public properties and methods
             return object.public;
         }
     };
@@ -51,7 +74,7 @@ var createClass = function() {
         private.classes[classId] = classOptions;
 
         var classCaller = function() {
-            return private.createObject(this.__id, arguments);
+            return private.getObjectForCaller(this.__id, arguments);
         };
         classCaller.prototype.__id = classId;
         return classCaller;

@@ -1,6 +1,6 @@
 {
   "name": "zyberWare-createClass",
-  "description": "Allows you to create php-like classes and objects",
+  "description": "Allows you to create php-like classes and objects and extend them",
   "keywords": [
     "class",
     "oop",
@@ -8,7 +8,8 @@
     "php",
     "private",
     "protected",
-    "public"
+    "public",
+    "extends"
   ],
   "author": {
     "name": "Eric Enold",

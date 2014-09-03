@@ -38,7 +38,14 @@ var createClass = function() {
 
             //Do we have a parent class?
             if (classOptions.extends && (parentClassId = classOptions.extends.prototype.__id)) {
-                parentObject = private.buildObject(parentClassId, object.protected, object.public);
+                private.buildObject(parentClassId, object.protected, object.public);
+
+                //Save current object as parent-object
+                //( object.protected and object.public were written by private.buildObject() )
+                parentObject = { //No access to the private stuff
+                    protected: private.getClone(object.protected),
+                    public: private.getClone(object.public),
+                };
             }
 
             for (visibility in object) {
@@ -50,6 +57,11 @@ var createClass = function() {
                         object[visibility][key] = object[visibility][key].bind(object);
                     }
                 }
+            }
+
+            //Add parent-object to current object
+            if (typeof parentObject !== "undefined") {
+                object.parent = parentObject;
             }
 
             return object;

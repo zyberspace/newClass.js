@@ -1,8 +1,8 @@
 if (typeof require !== "undefined") { //This example can also be used in a web browser
-    var createClass = require("../createClass");
+    var newClass = require("../newClass");
 }
 
-var MyClass = createClass({
+var MyClass = newClass({
     "private": {
         "foo": "bar"
     },
@@ -19,7 +19,7 @@ var MyClass = createClass({
     }
 });
 
-var MyExtendingClass = createClass({
+var MyExtendingClass = newClass({
     "extends": MyClass,
     "protected": {
         "Yin": "Yan-extended",

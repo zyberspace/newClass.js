@@ -1,8 +1,8 @@
 if (typeof require !== "undefined") { //This example can also be used in a web browser
-    var createClass = require("../createClass");
+    var newClass = require("../newClass");
 }
 
-var MyClass = createClass({
+var MyClass = newClass({
     "public": {
         "__": function() { // "__construct" is also possible
             console.log("Constructor was called.");

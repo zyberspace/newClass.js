@@ -3,7 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 "use strict";
 
-var createClass = function() {
+var newClass = function() {
     var privateApi = {
         "getClone": function(item) { //If item is an object it gets clonned, if not it just return the passed item
             if (typeof item === "object") {
@@ -89,5 +89,5 @@ var createClass = function() {
 }();
 
 if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
-    module.exports = createClass;
+    module.exports = newClass;
 }

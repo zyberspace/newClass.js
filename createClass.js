@@ -5,7 +5,6 @@
 
 var createClass = function() {
     var privateApi = {
-        "classes": {}, //All defined classes will be saved here
         "getClone": function(item) { //If item is an object it gets clonned, if not it just return the passed item
             if (typeof item === "object") {
                 var itemClone = {};
@@ -17,12 +16,7 @@ var createClass = function() {
             return item;
         },
          //Only builds the object and returns it
-        "buildObject": function(classId, objectProtected, objectPublic) {
-            var classOptions = privateApi.classes[classId];
-            if (!classOptions) {
-                throw "Error: There is no class registered with the id \"" + classId + "\"!";
-            }
-
+        "buildObject": function(classOptions, objectProtected, objectPublic) {
             //The protected- and public-object are shared in the whole family
             if (typeof objectProtected !== "undefined" && typeof objectPublic !== "undefined") {
                 var object = {
@@ -39,8 +33,8 @@ var createClass = function() {
             }
 
             //Do we have a parent class?
-            if (classOptions.extends && classOptions.extends.prototype.__id) {
-                privateApi.buildObject(classOptions.extends.prototype.__id, object.protected, object.public);
+            if (classOptions.extends && classOptions.extends.prototype.__classOptions) {
+                privateApi.buildObject(classOptions.extends.prototype.__classOptions, object.protected, object.public);
 
                 //Save current object as parent-object
                 //( object.protected and object.public were written by privateApi.buildObject() )
@@ -69,9 +63,9 @@ var createClass = function() {
             return object;
         },
          //Build the object, calls the constructor and returns the public properties and methods
-        "getObjectForCaller": function(classId, contructArguments) {
+        "getObjectForCaller": function(classOptions, contructArguments) {
             //Build object
-            var object = privateApi.buildObject(classId);
+            var object = privateApi.buildObject(classOptions);
 
             //Call constructor
             (object.public["__construct"] || object.public["__"] || function() {}).apply(object, contructArguments);
@@ -82,15 +76,11 @@ var createClass = function() {
     };
 
     return function(classOptions) {
-        do {
-            var classId = Math.random().toString(36).substr(2);
-        } while (typeof privateApi.classes[classId] !== "undefined");
-        privateApi.classes[classId] = classOptions;
 
         var classCaller = function() {
-            return privateApi.getObjectForCaller(this.__id, arguments);
+            return privateApi.getObjectForCaller(this.__classOptions, arguments);
         };
-        classCaller.prototype.__id = classId;
+        classCaller.prototype.__classOptions = classOptions;
         return classCaller;
     };
 }();

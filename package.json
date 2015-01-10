@@ -1,6 +1,6 @@
 {
   "name": "new-class",
-  "description": "Create php-like classes and extend them. (supports private, protected and public visibility)",
+  "description": "Create php-like classes and extend them (supports private, protected and public visibility).",
   "keywords": [
     "class",
     "oop",

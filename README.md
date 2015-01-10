@@ -47,7 +47,7 @@ var AnotherClass = newClass({});
 
 Features:
 ---------
- - Declare properties and methods with special visibities (private, protected and public)
+ - Declare properties and methods with special visibilities (private, protected and public)
  - Extend classes and override protected and public properties / methods with ease, or add new ones
  - Access the extended class via the `this.parent`-object (like in php)
 

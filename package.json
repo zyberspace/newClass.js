@@ -19,7 +19,13 @@
     "type" : "MPL",
     "url" : "http://mozilla.org/MPL/2.0/"
   },
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "homepage": "https://github.com/zyberspace/newClass.js",
+  "bugs": "https://github.com/zyberspace/newClass.js/issues",
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/zyberspace/newClass.js.git"
+  },
 
   "main": "newClass.js"
 }

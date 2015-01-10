@@ -76,6 +76,9 @@ var createClass = function() {
     };
 
     return function(classOptions) {
+        if (typeof classOptions !== "object") {
+            throw "Error: classOptions must be an object and can not be undefined!";
+        }
 
         var classCaller = function() {
             return privateApi.getObjectForCaller(this.__classOptions, arguments);

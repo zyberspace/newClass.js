@@ -1,14 +1,16 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+"use strict";
+
 var createClass = function() {
-    var private = {
+    var privateApi = {
         "classes": {}, //All defined classes will be saved here
         "getClone": function(item) { //If item is an object it gets clonned, if not it just return the passed item
             if (typeof item === "object") {
                 var itemClone = {};
                 for (key in item) {
-                    itemClone[key] = private.getClone(item[key]);
+                    itemClone[key] = privateApi.getClone(item[key]);
                 }
                 item = itemClone;
             }
@@ -16,7 +18,7 @@ var createClass = function() {
         },
          //Only builds the object and returns it
         "buildObject": function(classId, objectProtected, objectPublic) {
-            var classOptions = private.classes[classId];
+            var classOptions = privateApi.classes[classId];
             if (!classOptions) {
                 throw "Error: There is no class registered with the id \"" + classId + "\"!";
             }
@@ -38,19 +40,19 @@ var createClass = function() {
 
             //Do we have a parent class?
             if (classOptions.extends && (parentClassId = classOptions.extends.prototype.__id)) {
-                private.buildObject(parentClassId, object.protected, object.public);
+                privateApi.buildObject(parentClassId, object.protected, object.public);
 
                 //Save current object as parent-object
-                //( object.protected and object.public were written by private.buildObject() )
+                //( object.protected and object.public were written by privateApi.buildObject() )
                 parentObject = { //No access to the private stuff
-                    protected: private.getClone(object.protected),
-                    public: private.getClone(object.public),
+                    protected: privateApi.getClone(object.protected),
+                    public: privateApi.getClone(object.public),
                 };
             }
 
-            for (visibility in object) {
-                for (key in classOptions[visibility] || {}) {
-                    object[visibility][key] = private.getClone(classOptions[visibility][key]);
+            for (var visibility in object) {
+                for (var key in classOptions[visibility] || {}) {
+                    object[visibility][key] = privateApi.getClone(classOptions[visibility][key]);
 
                     //Bind to "object" if function
                     if (object[visibility][key].bind) {
@@ -69,7 +71,7 @@ var createClass = function() {
          //Build the object, calls the constructor and returns the public properties and methods
         "getObjectForCaller": function(classId, contructArguments) {
             //Build object
-            var object = private.buildObject(classId);
+            var object = privateApi.buildObject(classId);
 
             //Call constructor
             (object.public["__construct"] || object.public["__"] || function() {}).apply(object, contructArguments);
@@ -82,11 +84,11 @@ var createClass = function() {
     return function(classOptions) {
         do {
             var classId = Math.random().toString(36).substr(2);
-        } while (typeof private.classes[classId] !== "undefined");
-        private.classes[classId] = classOptions;
+        } while (typeof privateApi.classes[classId] !== "undefined");
+        privateApi.classes[classId] = classOptions;
 
         var classCaller = function() {
-            return private.getObjectForCaller(this.__id, arguments);
+            return privateApi.getObjectForCaller(this.__id, arguments);
         };
         classCaller.prototype.__id = classId;
         return classCaller;

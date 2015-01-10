@@ -45,8 +45,8 @@ var createClass = function() {
                 //Save current object as parent-object
                 //( object.protected and object.public were written by privateApi.buildObject() )
                 parentObject = { //No access to the private stuff
-                    protected: privateApi.getClone(object.protected),
-                    public: privateApi.getClone(object.public),
+                    "protected": privateApi.getClone(object.protected),
+                    "public": privateApi.getClone(object.public),
                 };
             }
 

@@ -1,5 +1,5 @@
 {
-  "name": "new-class",
+  "name": "newclass",
   "description": "Create php-like classes and extend them (supports private, protected and public visibility).",
   "keywords": [
     "class",

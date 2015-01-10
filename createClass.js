@@ -9,7 +9,7 @@ var createClass = function() {
         "getClone": function(item) { //If item is an object it gets clonned, if not it just return the passed item
             if (typeof item === "object") {
                 var itemClone = {};
-                for (key in item) {
+                for (var key in item) {
                     itemClone[key] = privateApi.getClone(item[key]);
                 }
                 item = itemClone;
@@ -39,12 +39,12 @@ var createClass = function() {
             }
 
             //Do we have a parent class?
-            if (classOptions.extends && (parentClassId = classOptions.extends.prototype.__id)) {
-                privateApi.buildObject(parentClassId, object.protected, object.public);
+            if (classOptions.extends && classOptions.extends.prototype.__id) {
+                privateApi.buildObject(classOptions.extends.prototype.__id, object.protected, object.public);
 
                 //Save current object as parent-object
                 //( object.protected and object.public were written by privateApi.buildObject() )
-                parentObject = { //No access to the private stuff
+                var parentObject = { //No access to the private stuff
                     "protected": privateApi.getClone(object.protected),
                     "public": privateApi.getClone(object.public),
                 };
